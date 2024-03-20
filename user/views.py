@@ -24,10 +24,12 @@ class LoginView(APIView):
         user = User.objects.filter(email=email).first()
         # check existence of email
         if not user:
-            raise AuthenticationFailed('Invalid email')
+            print("ime here")
+            return Response("Invalid email")
+
         # check validity of password
         if not user.check_password(password):
-             raise AuthenticationFailed('Invalid password')
+            return Response("Invalid password")
 
         payload = {
             'id': user.id,
@@ -45,17 +47,17 @@ class LoginView(APIView):
         }
         return response
 
-
+  
 class RegisterView(APIView):
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        user_id  = serializer.Meta.fields.index('id')
+        user_id= serializer.Meta.fields.index('id')
 
-
+        print("ime here")
         payload = {
             'id': user_id,
-            'exp': datetime.utcnow() + timedelta(minutes=1),
+            'exp': datetime.utcnow() + timedelta(minutes=30),
             'iat': datetime.utcnow()
         }
 
