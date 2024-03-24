@@ -11,7 +11,7 @@ class Booking(models.Model):
     check_out = models.DateTimeField(auto_now_add=False)
     num_adults = models.IntegerField(default=1)
     num_children = models.IntegerField(default=0)
-    price = models.DecimalField(max_digits=10, decimal_places=2 , default=0)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2 , default=0)
 
 class BookingRoom(models.Model):
     booking = models.ForeignKey(Booking, related_name='booking',on_delete=models.CASCADE)
