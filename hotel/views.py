@@ -1,4 +1,4 @@
-import datetime
+from _datetime import datetime
 
 from django.shortcuts import render
 from rest_framework import status
@@ -41,15 +41,54 @@ class Search(APIView):
     def get(self, request):
         # Retrieve data from request query parameters
         destination = request.query_params.get('destination')
+        checkin = request.query_params.get('checkin')
+        checkout = request.query_params.get('checkout')
+        amenities = request.query_params.get('amenities')
+        max_price = request.query_params.get('max_price')
+        min_price = request.query_params.get('min_price')
+        nb_star = request.query_params.get('nb_star')
+        try:
+            # Attempt to convert the string to a date object using the "%Y-%m-%d" format
+            checkin = datetime.strptime(checkin, "%Y-%m-%d")
+            checkout = datetime.strptime(checkout, "%Y-%m-%d")
+            if max_price is not None and min_price is not None:
+                max_price = float(max_price)
+                min_price = float(min_price)
+            if nb_star is not None:
+              nb_star = int(nb_star)
+        except ValueError:
+            print("Invalid date format. Please use YYYY-MM-DD.")
+        print(type(checkout))
 
-        if destination is None:
-            return Response({"error": "Destination is required"}, status=400)
+        list_hotels = []
+        with connection.cursor() as cursor:
+            if destination and checkin and checkout:
+                if amenities is  None and max_price is  None and min_price is  None and nb_star is None:
+                    cursor.callproc('find_available_hotels',[destination, checkin, checkout])
+                elif amenities is not None and max_price is not None and min_price is not None and nb_star is not None:
+                    cursor.callproc('find_available_hotels_amenities_price_star', [destination, checkin, checkout, amenities, min_price, max_price, nb_star])
+                elif amenities is not None and max_price is None and min_price is None and nb_star is None:
+                    cursor.callproc('find_available_hotels_amenities', [destination, checkin, checkout, amenities])
+                elif destination is not None and checkin is not None and checkout is not None and amenities is not None and max_price is not None and min_price is not None and nb_star is None:
+                    cursor.callproc('find_available_hotels_price_amenity', [destination, checkin, checkout, min_price, max_price,amenities])
+                elif amenities is not None and max_price is  None and min_price is  None and nb_star is not None:
+                    cursor.callproc('find_available_hotels_amenities_star', [destination, checkin, checkout, amenities,nb_star])
+                elif amenities is  None and max_price is not None and min_price is not None and nb_star is not None:
+                    cursor.callproc('find_available_hotels_price_star', [destination, checkin, checkout,min_price, max_price,nb_star])
+                elif destination is not None and checkin is not None and checkout is not None and amenities is  None and max_price is not None and min_price is not None and nb_star is None:
+                    cursor.callproc('find_available_hotels_price', [destination, checkin, checkout,min_price, max_price])
+                else:
+                    cursor.callproc('find_available_hotels_star', [destination, checkin, checkout,nb_star])
+                for row in cursor.fetchall():
+                    hotel_data = {}
+                    for idx, field in enumerate(
+                            ['id', 'name', 'location', 'ville', 'address', 'email', 'telephone', 'description',
+                             'nb_star']):
+                        hotel_data[field] = row[idx]
+                    list_hotels.append(hotel_data)
 
 
-        hotels = Hotel.objects.filter(ville=destination)
 
-        # Serialize the queryset
-        serializer = HotelSerializer(hotels, many=True)
 
         # Return the serialized data as response
-        return Response(serializer.data)
+        return Response(list_hotels, status=status.HTTP_200_OK)
