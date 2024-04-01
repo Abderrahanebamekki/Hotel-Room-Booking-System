@@ -26,7 +26,9 @@ class Bed(models.Model):
 class Bed_room(models.Model):
     bed = models.ForeignKey(Bed, on_delete=models.CASCADE)
     room = models.ForeignKey(RoomType, on_delete=models.CASCADE)
-
+    class Meta:
+        # Define unique constraint for bed and room combination
+        unique_together = ('bed', 'room')
 
 class Room(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)

@@ -16,5 +16,8 @@ class Booking(models.Model):
 class BookingRoom(models.Model):
     booking = models.ForeignKey(Booking, related_name='booking',on_delete=models.CASCADE)
     room = models.ForeignKey(Room, related_name='booking_rooms',on_delete=models.CASCADE)
+    class Meta:
+        # Define unique constraint for bed and room combinat
+        unique_together = (('booking', 'room'),)
 
 

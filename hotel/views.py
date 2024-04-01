@@ -12,34 +12,9 @@ from hotel.serializer import HotelSerializer
 
 # Create your views here.
 
-
-
-# class Search(APIView):
-#     def get(self, request):
-#         # Retrieve data from request body
-#         destination = request.data.get('destination')
-#         check_in_date = request.data.get('check_in')
-#         check_out_date = request.data.get('check_out')
-#         amenities_list = request.data.get('amenities', [])
-#         amenities = ','.join(amenities_list)          # convert amenities_list to a string with
-#
-#
-#
-#         with connection.cursor() as cursor:
-#             cursor.callproc('getHotels', [destination, check_in_date, check_out_date, amenities])
-#             list_hotels =  cursor.fetchall()
-#
-#
-#
-#
-#
-#         return Response(list_hotels)
-
-
-
 class Search(APIView):
     def get(self, request):
-        # Retrieve data from request query parameters
+
         destination = request.query_params.get('destination')
         checkin = request.query_params.get('checkin')
         checkout = request.query_params.get('checkout')
@@ -47,18 +22,18 @@ class Search(APIView):
         max_price = request.query_params.get('max_price')
         min_price = request.query_params.get('min_price')
         nb_star = request.query_params.get('nb_star')
+
         try:
-            # Attempt to convert the string to a date object using the "%Y-%m-%d" format
             checkin = datetime.strptime(checkin, "%Y-%m-%d")
             checkout = datetime.strptime(checkout, "%Y-%m-%d")
+            print(checkout)
             if max_price is not None and min_price is not None:
                 max_price = float(max_price)
                 min_price = float(min_price)
             if nb_star is not None:
               nb_star = int(nb_star)
         except ValueError:
-            print("Invalid date format. Please use YYYY-MM-DD.")
-        print(type(checkout))
+            return Response('invalid data format', status=status.HTTP_400_BAD_REQUEST)
 
         list_hotels = []
         with connection.cursor() as cursor:
@@ -87,8 +62,4 @@ class Search(APIView):
                         hotel_data[field] = row[idx]
                     list_hotels.append(hotel_data)
 
-
-
-
-        # Return the serialized data as response
         return Response(list_hotels, status=status.HTTP_200_OK)
