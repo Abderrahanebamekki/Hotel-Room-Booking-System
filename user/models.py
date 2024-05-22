@@ -5,13 +5,14 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
-    email = models.EmailField(max_length=255, unique=True)
     name = models.CharField(max_length=50)
-    username = None
+    username = models.EmailField(max_length=255, unique=True , null= True)
     password = models.CharField(max_length=255)
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
 
+    def __str__(self):
+        return self.username if self.username else 'No Username'
 
 class Client (models.Model):
     first_name = models.CharField(max_length=50, null=False)
@@ -19,4 +20,5 @@ class Client (models.Model):
     email = models.EmailField(max_length=255 , unique= True)
     phone = models.CharField(max_length=50, null= False)
     address = models.CharField(max_length=50, null= False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE , null=True)
 

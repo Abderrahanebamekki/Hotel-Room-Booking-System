@@ -26,12 +26,13 @@ SECRET_KEY = 'django-insecure-l4ipphvo&eqwdrw7^7w+hcbz&pyz%gws81vajkmk&7&n&84r9k
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+
 
 
 # Application definition
 
 INSTALLED_APPS = [
+'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,7 +42,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'user',
     'hotel',
-    'booking'
+    'booking',
+    'corsheaders',
 ]
 
 REST_FRAMEWORK = {
@@ -49,6 +51,24 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ],
     # Other settings...
+}
+
+JAZZMIN_SETTINGS = {
+    "site_title": "My Admin",
+    "site_header": "My Administration",
+    "site_brand": "Azore",
+    "welcome_sign": "Welcome to My Admin",
+    "copyright": "Azore",
+    "search_model": "auth.User",
+    "user_avatar": None,
+
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+    },
+
+    "show_sidebar": True,
+    "navigation_expanded": True,
 }
 
 MIDDLEWARE = [
@@ -59,9 +79,15 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware'
 ]
 
 ROOT_URLCONF = 'Dz_tourism.urls'
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000"  # Replace with your React app's URL
+]
 
 TEMPLATES = [
     {
@@ -147,4 +173,9 @@ EMAIL_PORT = 587  # Gmail SMTP port
 EMAIL_USE_TLS = True  # Gmail requires TLS encryption
 EMAIL_HOST_USER = config('EMAIL')  # Your Gmail address
 EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD')  # Your Gmail password or an app password if using 2-step verification
+# settings.py
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+
 
