@@ -17,7 +17,7 @@ from reportlab.graphics.shapes import Drawing
 from reportlab.graphics import renderPDF
 
 from hotel.models import Hotel
-from user.models import Client
+from user.models import Client, User
 from .models import Booking, BookingRoom, Room
 from django.db import connection
 
@@ -35,27 +35,29 @@ class BookingRoomView(APIView):
             raise AuthenticationFailed('Unauthenticated!')
 
         data = request.data
+        firstname = data.get('firstname')
+        lastname = data.get('lastname')
+        address = data.get('address')
+        email = data.get('email')
+        phone = data.get('phone')
         rooms = data.get('rooms', [])
         id_hotel = data.get('id_hotel')
         check_in_date = data.get('check_in_date')
         check_out_date = data.get('check_out_date')
-        id_client = data.get('id_client')
         num_adults = data.get('num_adults')
 
         try:
             check_in_date = datetime.strptime(check_in_date, "%Y-%m-%d")
             check_out_date = datetime.strptime(check_out_date, "%Y-%m-%d")
-            if id_client is not None:
-                id_client = int(id_client)
             if num_adults is not None:
                 num_adults = int(num_adults)
         except ValueError:
             return Response('Invalid data format', status=status.HTTP_400_BAD_REQUEST)
 
-        try:
-            client = Client.objects.get(id=id_client)
-        except Client.DoesNotExist:
-            return Response('Client not found', status=status.HTTP_404_NOT_FOUND)
+        user = User.objects.get(id=payload['user_id'])
+        client = Client(first_name=firstname , last_name=lastname , email=email ,address=address,phone=phone , user=user)
+        client.save()
+
 
         booking_date = datetime.now()
         booking = Booking(
@@ -107,7 +109,7 @@ class BookingRoomView(APIView):
         pdf_path = self.generate_pdf(booking, room_details , hotel)
 
         # Send Email with PDF
-        self.send_email_with_pdf(pdf_path, client.email)
+        self.send_email_with_pdf(pdf_path, email)
 
         return Response('Booking created successfully', status=status.HTTP_201_CREATED)
 
