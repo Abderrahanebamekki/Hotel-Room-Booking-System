@@ -192,30 +192,6 @@ class ActivateView(APIView):
         return Response(data={'message': 'success'}, status=status.HTTP_200_OK)
 
 
-# class ResendCode(APIView):
-#     def post(self, request):
-#         token = request.COOKIES.get('code')
-#
-#         try:
-#             payload = jwt.decode(token, 'secret', algorithms=['HS256'])
-#             user_id = payload['user_id']
-#             # Check if token has expired
-#             current_time = datetime.utcnow()
-#             expiration_time = datetime.fromtimestamp(payload['exp'])
-#             if current_time > expiration_time:
-#                 # Token has expired, return an error response
-#                 return Response({"message": "Token has expired. Please request a new verification code."}, status=status.HTTP_400_BAD_REQUEST)
-#             else:
-#                 return Response({"message": "Token is still valid."}, status=status.HTTP_200_OK)
-#         except jwt.InvalidTokenError:
-#             return Response({"message": "Invalid token."}, status=status.HTTP_400_BAD_REQUEST)
-#
-#     def send_verification_email(self, email, verification_code):
-#         subject = 'Email Verification Code'
-#         message = f'Your email verification code is: {verification_code}'
-#         from_email = 'timibamekki49@gmail.com'
-#         recipient_list = [email]
-#         send_mail(subject, message, from_email, recipient_list)
 
 
 class ForgetPasswordView(APIView):
@@ -242,16 +218,7 @@ class ForgetPasswordView(APIView):
             return Response({'error': 'Email does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
 
-# class ResetPasswordView(APIView):
-#     def get(self, request , user_id):
-#         user = User.objects.get(id=user_id)
-#         if user:
-#             token = default_token_generator.make_token(user)
-#             response = Response()
-#             response.set_cookie(key='reset', value=token, httponly=True)
-#             return response
-#         else:
-#             return Response({'error': 'user not exist'}, status=status.HTTP_404_NOT_FOUND)
+
 
 
 class ChangePasswordView(APIView):
