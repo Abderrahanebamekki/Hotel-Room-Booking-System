@@ -10,17 +10,13 @@ All API endpoints are prefixed with `api/` for standardization.
 ### 1. Register
 - **URL**: `api/register/`
 - **Method**: `POST`
-- **Description**: Allows new users to register by providing necessary details like email, password, and personal information.
+- **Description**: Allows new users to register by providing necessary details (username, password, and fullname).
 
 ### 2. Login
 - **URL**: `api/login/`
 - **Method**: `POST`
 - **Description**: Authenticates users and provides a token for secure access to protected resources.
 
-### 3. List Users
-- **URL**: `api/list/`
-- **Method**: `GET`
-- **Description**: Retrieves a list of all users. Access is restricted to admin roles.
 
 ### 4. Logout
 - **URL**: `api/logout/`
@@ -30,12 +26,12 @@ All API endpoints are prefixed with `api/` for standardization.
 ### 5. Verify Code
 - **URL**: `api/verify/`
 - **Method**: `POST`
-- **Description**: Verifies a user-provided code, typically used for email or phone verification during registration or login.
+- **Description**: Verifies a user-provided code, used for email verification during registration .
 
 ### 6. Forget Password
 - **URL**: `api/forgetpassword/`
 - **Method**: `POST`
-- **Description**: Initiates the password recovery process by sending a reset link or verification code to the user's email or phone.
+- **Description**: Initiates the password recovery process by sending a reset link to the user's email.
 
 ### 7. Change Password
 - **URL**: `api/change_password/`
@@ -50,6 +46,6 @@ All API endpoints are prefixed with `api/` for standardization.
 ### 9. Activate Account
 - **URL**: `api/activate/`
 - **Method**: `POST`
-- **Description**: Activates a user account using a code sent to their email or phone, completing the registration process.
+- **Description**: Activates a user account using a code sent to their email , completing the registration process.
 
 
