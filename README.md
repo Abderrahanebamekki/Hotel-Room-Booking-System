@@ -76,6 +76,31 @@ The Hotel Room Booking System Backend is designed to handle all the server-side 
 - **Description**: Fetches detailed information about a specific hotel, including its name, location, amenities, and pricing.
 - **Query Parameters**:
   - `id_hotel` (integer): The unique ID of the hotel for which detailed information is being fetched.
+
+
+## Hotel Booking Endpoints    
+ 
+### Create a Booking
+- **URL**: `api/book/`
+- **Method**: `POST`
+- **Description**: Creates a new hotel booking.
+
+### Get User Bookings
+- **URL**: `api/getbookings/`
+- **Method**: `GET`
+- **Description**: Retrieves all bookings for the authenticated user.
+
+### Update Booking
+- **URL**: `api/updatebooking/`
+- **Method**: `POST`
+- **Description**: Updates an existing booking.
+
+### Cancel Booking
+- **URL**: `api/cancelbooking/`
+- **Method**: `POST`
+- **Description**: Cancels an existing booking.
+
+
   
 
 
