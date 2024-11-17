@@ -46,4 +46,36 @@ The Hotel Room Booking System Backend is designed to handle all the server-side 
 - **Method**: `POST`
 - **Description**: Activates a user account using a code sent to their email , completing the registration process.
 
+## Hotel Booking Endpoints
+
+### Search Hotels
+- **URL**: `api/search/`
+- **Method**: `GET`
+- **Description**: Allows users to search for hotels based on various criteria.
+- **Query Parameters**:
+  - `destination` (string): The location where the user wants to search for hotels.
+  - `checkin` (date): The check-in date for the booking (format: YYYY-MM-DD).
+  - `checkout` (date): The check-out date for the booking (format: YYYY-MM-DD).
+  - `amenities` (string): Comma-separated list of desired amenities (e.g., "wifi,pool").
+  - `max_price` (float): The maximum price the user is willing to pay per night.
+  - `min_price` (float): The minimum price the user is willing to pay per night.
+  - `nb_star` (integer): The star rating of the hotels (e.g., 3, 4, 5).
+
+### Check Available Rooms
+- **URL**: `api/availableRooms/`
+- **Method**: `GET`
+- **Description**: Retrieves a list of rooms available for booking in a selected hotel based on the provided dates.
+- **Query Parameters**:
+  - `id_hotel` (integer): The unique ID of the hotel for which available rooms are being queried.
+  - `checkin` (date): The check-in date for the booking (format: YYYY-MM-DD).
+  - `checkout` (date): The check-out date for the booking (format: YYYY-MM-DD).
+
+### Hotel Details
+- **URL**: `api/hotel/`
+- **Method**: `GET`
+- **Description**: Fetches detailed information about a specific hotel, including its name, location, amenities, and pricing.
+- **Query Parameters**:
+  - `id_hotel` (integer): The unique ID of the hotel for which detailed information is being fetched.
+  
+
 
