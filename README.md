@@ -3,8 +3,6 @@ The Hotel Room Booking System Backend is designed to handle all the server-side 
 
 # API Endpoints
 
-All API endpoints are prefixed with `api/` for standardization.
-
 ## Authentication & User Management Endpoints
 
 ### 1. Register
